@@ -27,3 +27,7 @@ replay_pid*
 \.metadata
 .metadata/*
 *.metadata
+.metadata/.plugins
+.metadata\.plugins\*
+.metadata/.plugins/
+.metadata/.plugins/*

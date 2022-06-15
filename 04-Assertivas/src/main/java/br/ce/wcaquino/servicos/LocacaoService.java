@@ -26,9 +26,6 @@ public class LocacaoService {
 		//TODO adicionar método para salvar
 		
 		return locacao;
-	}
+	}//alugarFilme
 
-	public static void main(String[] args) {
-		
-	}
-}
+}//LocacaoService
