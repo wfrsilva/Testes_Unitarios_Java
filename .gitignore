@@ -24,5 +24,6 @@ hs_err_pid*
 replay_pid*
 *.snap
 .metadata
+\.metadata
 .metadata/*
-*metadata
+*.metadata
