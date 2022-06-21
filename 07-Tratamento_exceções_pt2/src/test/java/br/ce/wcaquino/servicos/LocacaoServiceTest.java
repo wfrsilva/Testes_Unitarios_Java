@@ -18,6 +18,8 @@ import org.junit.rules.ExpectedException;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
+import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
+import br.ce.wcaquino.exceptions.LocadoraException;
 import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
@@ -35,6 +37,7 @@ public class LocacaoServiceTest {
 		Usuario usuario = new Usuario("Usuario 01");
 		Filme filme = new Filme("Filme 01", 2, 5.0);
 		
+		
 		//acao
 		Locacao locacao = service.alugarFilme(usuario, filme);
 			
@@ -45,12 +48,12 @@ public class LocacaoServiceTest {
 	}//testeLocacao
 	
 	
-	@Test(expected=Exception.class) //elegante
+	@Test(expected = FilmeSemEstoqueException.class) //elegante
 	public void testLocacao_filmeSemEstoque() throws Exception{
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 1", 0 , 5.0);
+		Filme filme = new Filme("Filme 1", 0 , 4.0);
 		
 		//acao
 		service.alugarFilme(usuario, filme);
@@ -58,37 +61,37 @@ public class LocacaoServiceTest {
 	}//testLocacao_filmeSemEstoque
 	
 	@Test //robusto
-	public void testLocacao_filmeSemEstoque_2() {
+	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException {
 		//cenario
 		LocacaoService service = new LocacaoService();
-		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 1", 0, 5.0);
+		Filme filme = new Filme("Filme 2", 1, 4.0);
 		
 		//acao
 		try {
-			service.alugarFilme(usuario,  filme);
-			Assert.fail("Deveria ter lancao uma excecao");
-		} catch (Exception e) {
-			assertThat(e.getMessage(), is("Filme sem estoque"));
-		}
-		
-	}//testLocacao_filmeSemEstoque_2
+			service.alugarFilme(null, filme);
+			Assert.fail();
+		} catch (LocadoraException e) {
+			assertThat(e.getMessage(), is("Usuario Vazio"));
+		} 
+	}//testLocacao_usuarioVazio
 	
-	@Test
-	public void testocacao_filmeSemEstoque_3() throws Exception {
-		//cenario
+	@Test //nova
+	public void testLocacao_FilmeVazio() throws LocadoraException, FilmeSemEstoqueException {
+		//cenario 
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 1", 0, 5.0);
-		
-		exception.expect(Exception.class);
-		exception.expectMessage("Filme sem estoque");
+
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Filme Vazio");
 		
 		//acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, null);
 		
 		
-	}//testocacao_filmeSemEstoqu_3
+		
+	}//testLocacao_FilmeVazio
+	
+	
 	
 
 }//LocacaoServiceTest
